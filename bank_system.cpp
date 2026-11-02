@@ -20,12 +20,12 @@ using namespace std;
 #define MAX_BALANCE 1000000
 
 // Currency conversion rates (as of a fictional date)
-float USD_TO_EUR = 0.85f;
-float USD_TO_JPY = 110.0f;
-float EUR_TO_USD = 1.18f;
-float EUR_TO_JPY = 129.5f;
-float JPY_TO_USD = 0.0091f;
-float JPY_TO_EUR = 0.0077f;
+double USD_TO_EUR = 0.80;
+double USD_TO_JPY = 100.0;
+double EUR_TO_USD = 1.25;
+double EUR_TO_JPY = 130.0;
+double JPY_TO_USD = 0.01;
+double JPY_TO_EUR = 0.0076923;
 
 // Account structure
 struct Account {
@@ -41,7 +41,7 @@ Account createAccount(int accountNum);
 void deposit(Account& account, int amount);
 bool withdraw(Account& account, int amount);
 double calculateInterest(Account account, int days);
-float convertCurrency(double amount, char fromCurrency, char toCurrency);
+double convertCurrency(double amount, char fromCurrency, char toCurrency);
 void displayAccountSummary(const Account& account);
 void testBoundaryConditions();
 
@@ -130,101 +130,113 @@ int main() {
             }
             
             case 4: {
-    // Calculate interest
-    int accNum, days;
-    cout << "Enter account number: ";
-    cin >> accNum;
+                // Calculate interest
+                int accNum, days;
+                cout << "Enter account number: ";
+                cin >> accNum;
 
-    bool found = false;
-    for (int i = 0; i < accounts.size(); i++) {
-        if (accounts[i].accountNumber == accNum) {
-            cout << "Enter number of days: ";
-            cin >> days;
+                bool found = false;
+                for (int i = 0; i < accounts.size(); i++) {
+                    if (accounts[i].accountNumber == accNum) {
+                        cout << "Enter number of days: ";
+                        cin >> days;
 
-            double interest = calculateInterest(accounts[i], days);
-            cout << "Interest earned after " << days << " days: $" << interest << endl;
-            cout << "Updated balance with interest: $" << accounts[i].balance + interest << endl;
-            found = true;
-            break;
-        }
-    }
+                        double interest = calculateInterest(accounts[i], days);
+                        cout << "Interest earned after " << days << " days: $" << interest << endl;
+                        cout << "Updated balance with interest: $" << accounts[i].balance + interest << endl;
+                        found = true;
+                        break;
+                    }
+                }
 
-    if (!found) {
-        cout << "Account not found." << endl;
-    }
-    break;
-}
-
-case 5: {
-    // Convert currency
-    int accNum;
-    char fromCurr, toCurr;
-    cout << "Enter account number: ";
-    cin >> accNum;
-
-    bool found = false;
-    for (int i = 0; i < accounts.size(); i++) {
-        if (accounts[i].accountNumber == accNum) {
-            cout << "Available currencies: U (USD), E (EUR), J (JPY)" << endl;
-            cout << "From currency (U/E/J): ";
-            cin >> fromCurr;
-            cout << "To currency (U/E/J): ";
-            cin >> toCurr;
-
-            float convertedAmount = convertCurrency(accounts[i].balance,
-                                                    toupper(fromCurr),
-                                                    toupper(toCurr));
-
-            cout << "Converted amount: ";
-            switch (toupper(toCurr)) {
-                case 'U': cout << "$"; break;
-                case 'E': cout << "€"; break;
-                case 'J': cout << "¥"; break;
+                if (!found) {
+                    cout << "Account not found." << endl;
+                }
+                break;
             }
-            cout << convertedAmount << endl;
-            found = true;
-            break;
-        }
+
+            case 5: {
+                // Convert currency
+                int accNum;
+                char fromCurr, toCurr;
+                cout << "Enter account number: ";
+                cin >> accNum;
+
+                bool found = false;
+                for (int i = 0; i < accounts.size(); i++) {
+                    if (accounts[i].accountNumber == accNum) {
+                        cout << "Available currencies: U (USD), E (EUR), J (JPY)" << endl;
+                        cout << "From currency (U/E/J): ";
+                        cin >> fromCurr;
+                        cout << "To currency (U/E/J): ";
+                        cin >> toCurr;
+
+                        float convertedAmount = convertCurrency(accounts[i].balance,
+                                                                toupper(fromCurr),
+                                                                toupper(toCurr));
+
+                        cout << "Converted amount: ";
+                        switch (toupper(toCurr)) {
+                            case 'U': cout << "$"; break;
+                            case 'E': cout << "€"; break;
+                            case 'J': cout << "¥"; break;
+                        }
+                        cout << convertedAmount << endl;
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (!found) {
+                    cout << "Account not found." << endl;
+                }
+                break;
+            }
+
+            case 6: {
+                // Display all accounts
+                if (accounts.empty()) {
+                    cout << "No accounts to display." << endl;
+                } else {
+                    cout << "\n===== ACCOUNT SUMMARIES =====" << endl;
+                    for (const Account& acc : accounts) {
+                        displayAccountSummary(acc);
+                        cout << "-----------------------------" << endl;
+                    }
+                }
+                break;
+            }
+
+            case 7: {
+                // Test boundary conditions
+                testBoundaryConditions();
+                break;
+            }
+
+            case 8:
+                cout << "Exiting program. Thank you!" << endl;
+                break;
+
+            default:
+                cout << "Invalid choice. Please try again." << endl;
+            }
+
+            cout << endl;
+            } while (choice != 8);
+
+            return 0;
+}
+
+// Function to safely convert float to int:
+bool safeFloatToInt(float floatValue, int& result) {
+    int maxInt = numeric_limits<int>::max();
+    float remainder = floatValue - static_cast<int>(floatValue); 
+    // Check if float is too large for int or if the float remainder (which will be lost in conversion) is large
+    if (floatValue > static_cast<float>(maxInt) || remainder > 0.01) {
+        return false;
     }
-
-    if (!found) {
-        cout << "Account not found." << endl;
-    }
-    break;
-}
-
-case 6: {
-    // Display all accounts
-    if (accounts.empty()) {
-        cout << "No accounts to display." << endl;
-    } else {
-        cout << "\n===== ACCOUNT SUMMARIES =====" << endl;
-        for (const Account& acc : accounts) {
-            displayAccountSummary(acc);
-            cout << "-----------------------------" << endl;
-        }
-    }
-    break;
-}
-
-case 7: {
-    // Test boundary conditions
-    testBoundaryConditions();
-    break;
-}
-
-case 8:
-    cout << "Exiting program. Thank you!" << endl;
-    break;
-
-default:
-    cout << "Invalid choice. Please try again." << endl;
-}
-
-cout << endl;
-} while (choice != 8);
-
-return 0;
+    result = static_cast<int>(floatValue);
+    return true;
 }
 
 // Function to display the main menu
@@ -267,7 +279,7 @@ Account createAccount(int accountNum) {
 void deposit(Account& account, int amount) {
     // Problem: int amount is added to a double
     if (amount > 0) {
-        account.balance += amount;
+        account.balance += static_cast<double>(amount);
     } 
 }
 
@@ -275,7 +287,7 @@ void deposit(Account& account, int amount) {
 bool withdraw(Account& account, int amount) {
     // Problem: int amount is subtracted from a double
     if (amount > 0 && amount <= account.balance) {
-        account.balance -= amount;
+        account.balance -= static_cast<double>(amount);
         return true;
     }
     return false;
@@ -292,27 +304,42 @@ double calculateInterest(Account account, int days) {
         rate = 0.01; // 1%
     }
     
-    // Problem: days is converte to float in division
-    float dailyRate = rate / 365;
+    // Problem: days is converted to float in division
+    double dailyRate = rate / 365;
     
     // Problem: mixing double, float and int in calculation
     double interest = account.balance * dailyRate * days;
     
     // Truncate interest to 2 decimal places (cents)
     int centsInterest = static_cast<int>(interest * 100);
-    return centsInterest / 100.0;
+    return (static_cast<double>(centsInterest) / 100.0);
 }
 
 // Function to convert between currencies
-float convertCurrency(double amount, char fromCurrency, char toCurrency) {
+double convertCurrency(double amount, char fromCurrency, char toCurrency) {
+    
+    // Input validation
+    if (amount < 0) {
+        cout << "Error: negative amount to convert detected!" << endl;
+        return 0.0;
+    }
+    if (fromCurrency != 'E' && fromCurrency != 'J' && fromCurrency != 'U') {
+        cout << "Error: invalid currency type detected" << endl;
+        return 0.0;
+    }
+    if (toCurrency != 'E' && toCurrency != 'J' && toCurrency != 'U') {
+        cout << "Error: invalid currency type detected" << endl;
+        return 0.0;
+    }
+    
     // Problem: double amount converted to float result
-    float result = amount;
+    double result = amount;
     
     if (fromCurrency == toCurrency) {
         return result;
     }
     
-    // COnvert from source currency to USD as an intermediate step
+    // Convert from source currency to USD as an intermediate step
     if (fromCurrency == 'E') { // From JPY
         result *= EUR_TO_USD;
     } else if (fromCurrency == 'J') {
@@ -322,7 +349,7 @@ float convertCurrency(double amount, char fromCurrency, char toCurrency) {
     // Convert from USD to target currency
     if (fromCurrency != 'U' && toCurrency == 'U') {
         // Already converted to USD
-    }else if (toCurrency == 'E') {
+    } else if (toCurrency == 'E') {
         result *= USD_TO_EUR;
     } else if(toCurrency == 'J') {
         result *= USD_TO_JPY;
@@ -369,26 +396,26 @@ void testBoundaryConditions() {
     double rate = 0.03333333;
     
     // Problem: Potential precision loss when converting double to float
-    float dailyRate = rate / 365;
+    double dailyRate = rate / 365;
     
     // Problem: Mixing types in calculation
     double interest = testAccount.balance * dailyRate * 30;
     
     cout << "\nTest 2: Decimal precision" << endl;
     cout << "Interest rate: " << rate * 100 << "%" << endl;
-    cout << "Daily rate: " << dailyRate << endl;
+    cout << "Daily rate: " << dailyRate * 100 << "%" << endl;
     cout << "Interest for 30 days: $" << interest << endl;
     
     // Test 3: Currency conversion precision
     double largeBalance = 1000000.0;
     
     // Problem: Converting large double to float for currency conversion
-    float eurAmount = convertCurrency(largeBalance, 'U', 'E');
-    float jpyAmount = convertCurrency(largeBalance, 'U', 'J');
-    float jpyAmount2 = convertCurrency(largeBalance, 'E', 'J');
+    double eurAmount = convertCurrency(largeBalance, 'U', 'E');
+    double jpyAmount = convertCurrency(largeBalance, 'U', 'J');
+    double jpyAmount2 = convertCurrency(largeBalance, 'E', 'J');
     
-    float newAmount =  convertCurrency(eurAmount, 'E', 'U');
-    float newAmount2 =  convertCurrency(jpyAmount, 'J', 'U');
+    double newAmount =  convertCurrency(eurAmount, 'E', 'U');
+    double newAmount2 =  convertCurrency(jpyAmount, 'J', 'U');
     
     
     cout << "\nTest 3: Currency conversion precision" << endl;
