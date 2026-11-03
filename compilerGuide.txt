@@ -1,0 +1,53 @@
+# C++ compiler bash commands using g++
+
+# -----------------------------------------------------------------
+# Common compilation commands:
+# -----------------------------------------------------------------
+# default compilation command: 
+g++ filename.cpp -o filename
+
+# compilation with warning messages: 
+g++ -Wall filename.cpp -o filename
+
+# compilation with extra warning messages: 
+g++ -Wall -Wextra filename.cpp -o filename
+
+# compilation with warning messages and using debug-mode: 
+g++ -Wall -g filename.cpp -o filename
+
+
+# -----------------------------------------------------------------
+# Compilation stages: 
+# -----------------------------------------------------------------
+# dump preprocessed code to textfile: 
+g++ -E filename.cpp > compilerPreprocessed.txt
+
+# create assembly code in .s file:
+g++ -S compilerStages.cpp
+
+# create .o machine-code file:
+g++ -c compilerStages.cpp -o compilerStages.o
+
+# Link included libraries and combine all code into an executable from machine-code (.o) files: 
+g++ compilerStages.o -o compilerStages
+
+
+# -----------------------------------------------------------------
+# Compiler optimizations: 
+# -----------------------------------------------------------------
+# No optimization:
+g++ program.cpp -o program_O0
+
+# Basic optimization:
+g++ -O1 program.cpp -o program_O1
+
+# Standard optimization:
+g++ -O2 program.cpp -o program_O2
+
+# Maximum optimization:
+g++ -O3 program.cpp -o program_O3
+
+# Optimize for minimum file size:
+g++ -Os program.cpp -o program_Os
+
+
