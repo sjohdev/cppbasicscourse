@@ -15,6 +15,23 @@ g++ -Wall -Wextra filename.cpp -o filename
 # compilation with warning messages and using debug-mode: 
 g++ -Wall -g filename.cpp -o filename
 
+# -----------------------------------------------------------------
+# Compile multi-file program: 
+# -----------------------------------------------------------------
+# 1. Compile all source files to .o files:
+g++ -c main.cpp file2.cpp file3.cpp file4.cpp
+
+# 2. Link all .o object files to create one executable: 
+g++ main.o file2.o file3.o file4.o -o program_name
+
+# 3. Run your program:
+./program_name
+
+# NOTE: you can also compile and link all source files into an 
+# executable with just one single line:
+g++ main.cpp file2.cpp file3.cpp file4.cpp -o program_name
+
+
 
 # -----------------------------------------------------------------
 # Compilation stages: 

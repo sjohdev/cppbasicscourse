@@ -17,3 +17,7 @@ double absolute(double number) {
         return number;
     }
 }
+
+double cube(double number) {
+    return number * number * number;
+}
