@@ -1,0 +1,23 @@
+BEGIN
+    Initialize variables (count, min, max, sum)    
+    REPEAT
+        Prompt user for a number
+        Get user input        
+        IF count < MAX_NUMBERS THEN
+            Store number in array
+            Update min if number is smaller than current min
+            Update max if number is larger than current max
+            Add number to sum
+            Increment count
+        END IF        
+        Ask if user wants to enter another number
+        Get user response
+    UNTIL user doesn't want to enter more numbers OR count equals MAX_NUMBERS    
+    Calculate average (sum / count)    
+    Display min, max, sum, average    
+    FOR each number in the array
+        Determine if even or odd
+        Determine if positive or negative
+        Display results
+    END FOR
+END

@@ -1,0 +1,21 @@
+BEGIN
+    Prompt user for a string
+    Get user input    
+    Initialize vowel count and consonant count to 0    
+    FOR each character in the string
+        IF character is a letter THEN
+            IF character is a vowel THEN
+                Increment vowel count
+            ELSE
+                Increment consonant count
+            END IF
+        END IF
+    END FOR    
+    Create reversed string    
+    IF original string equals reversed string (ignoring case) THEN
+        Set isPalindrome to true
+    ELSE
+        Set isPalindrome to false
+    END IF    
+    Display vowel count, consonant count, reversed string, and whether it's a palindrome
+END

@@ -1,0 +1,25 @@
+BEGIN
+    REPEAT
+        Display menu options
+        Get user choice
+        
+        IF choice is valid THEN
+            Get temperature value            
+            IF choice is Celsius to Fahrenheit THEN
+                result = (celsius * 9/5) + 32
+                Display result
+            ELSE IF choice is Fahrenheit to Celsius THEN
+                result = (fahrenheit - 32) * 5/9
+                Display result
+            ELSE IF choice is exit THEN
+                Exit program
+            ELSE
+                Display error message
+            END IF            
+        ELSE
+            Display error message
+        END IF        
+        Ask if user wants to continue
+        Get user response
+    UNTIL user wants to exit
+END
